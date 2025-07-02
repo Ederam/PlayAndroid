@@ -1,60 +1,73 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="#000000">
 
-    <!-- Cronómetro -->
+    <!-- Título -->
     <TextView
-        android:id="@+id/tvTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tiempo: 30"
-        android:textSize="20sp"
+        android:id="@+id/tvTitle"
+        android:text="¡Memoria Rápida!"
+        android:textSize="24sp"
         android:textColor="#FFFFFF"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
-    <!-- Puntaje -->
-    <TextView
-        android:id="@+id/tvScore"
+        android:layout_marginBottom="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Puntos: 0"
-        android:textSize="20sp"
+        />
+
+    <!-- Botones de colores -->
+    <GridLayout
+        android:id="@+id/colorGrid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:layout_marginBottom="24dp">
+
+        <Button
+            android:id="@+id/btnRed"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:backgroundTint="#FF0000"/>
+
+        <Button
+            android:id="@+id/btnGreen"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:backgroundTint="#00FF00"/>
+
+        <Button
+            android:id="@+id/btnBlue"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:backgroundTint="#0000FF"/>
+
+        <Button
+            android:id="@+id/btnYellow"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:backgroundTint="#FFFF00"/>
+
+    </GridLayout>
+
+    <!-- Texto de estado -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:text="¡Presiona para empezar!"
+        android:textSize="18sp"
         android:textColor="#FFFFFF"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <!-- Monstruo (inicialmente invisible) -->
-    <ImageView
-        android:id="@+id/imgMonster"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/sullivan"
-        android:visibility="invisible"
-        android:layout_centerInParent="true" />
-
-    <!-- Pantalla Game Over -->
-    <TextView
-        android:id="@+id/tvGameOver"
+        android:layout_marginBottom="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¡Juego Terminado!"
-        android:textSize="28sp"
-        android:textColor="#FF0000"
-        android:visibility="gone"
-        android:layout_centerInParent="true" />
+        />
 
-    <!-- Botón Reiniciar -->
+    <!-- Botón de iniciar/reiniciar -->
     <Button
-        android:id="@+id/btnRestart"
+        android:id="@+id/btnStart"
+        android:text="Comenzar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reiniciar"
-        android:visibility="gone"
-        android:layout_below="@id/tvGameOver"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
-</RelativeLayout>
+        android:layout_height="wrap_content"/>
+</LinearLayout>

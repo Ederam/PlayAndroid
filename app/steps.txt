@@ -15,3 +15,27 @@ Ya tienes:
 🔊 Sonido de toque
 📦 APK exportado
 
+-----------------------
+🧠 Juego: “¡Memoria Rápida!”
+🧩 Descripción:
+Se muestran 4 botones de colores.
+En cada ronda, se reproduce una secuencia aleatoria de colores.
+El jugador debe repetir la secuencia tocando los botones en el mismo orden.
+Cada vez que aciertas, la secuencia se alarga en 1.
+Si te equivocas: Game Over.
+Es una versión básica del clásico “Simon Says”.
+
+✅ Qué aprenderás:
+Arrays dinámicos
+Manejo de tiempos con Handler
+Animaciones visuales simples
+Lógica condicional más avanzada
+
+✅ ¿Qué incluye este juego?
+4 botones de colores
+Secuencia creciente aleatoria
+Verificación del orden tocado
+Marcador del nivel
+Texto de estado y reinicio
+
+Se realiza el juego pero no es entendible su funcionalidad al 100%

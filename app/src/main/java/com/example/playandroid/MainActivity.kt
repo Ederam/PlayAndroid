@@ -1,119 +1,105 @@
 package com.example.playandroid
 
-import android.media.MediaPlayer
+import android.graphics.Color
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.view.View
+import android.os.Handler
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var monster: ImageView
-    private lateinit var tvScore: TextView
-    private lateinit var tvTimer: TextView
-    private lateinit var tvGameOver: TextView
-    private lateinit var btnRestart: Button
-    private lateinit var layout: RelativeLayout
+    private lateinit var btnRed: Button
+    private lateinit var btnGreen: Button
+    private lateinit var btnBlue: Button
+    private lateinit var btnYellow: Button
+    private lateinit var btnStart: Button
+    private lateinit var tvStatus: TextView
 
-    private var score = 0
+    private val colorButtons = mutableListOf<Button>()
+    private val sequence = mutableListOf<Int>()
+    private var userIndex = 0
     private var playing = false
-    private lateinit var hitSound: MediaPlayer
-    private lateinit var gameOverSound: MediaPlayer
-    private lateinit var countDown: CountDownTimer
-    private lateinit var moveTimer: CountDownTimer
+
+    private val handler = Handler()
+    private val flashDuration = 400L
+    private val delayBetween = 600L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        monster = findViewById(R.id.imgMonster)
-        tvScore = findViewById(R.id.tvScore)
-        tvTimer = findViewById(R.id.tvTimer)
-        tvGameOver = findViewById(R.id.tvGameOver)
-        btnRestart = findViewById(R.id.btnRestart)
-        layout = findViewById(R.id.mainLayout)
+        btnRed = findViewById(R.id.btnRed)
+        btnGreen = findViewById(R.id.btnGreen)
+        btnBlue = findViewById(R.id.btnBlue)
+        btnYellow = findViewById(R.id.btnYellow)
+        btnStart = findViewById(R.id.btnStart)
+        tvStatus = findViewById(R.id.tvStatus)
 
-//        hitSound = MediaPlayer.create(this, R.raw.hit)
-//        gameOverSound = MediaPlayer.create(this, R.raw.game_over)
+        colorButtons.addAll(listOf(btnRed, btnGreen, btnBlue, btnYellow))
 
-        monster.setOnClickListener {
-            if (playing) {
-                score++
-                tvScore.text = "Puntos: $score"
-                hitSound.start()
-                moveMonster()
+        // Manejo del botón de iniciar
+        btnStart.setOnClickListener {
+            sequence.clear()
+            userIndex = 0
+            tvStatus.text = "Observa la secuencia..."
+            playing = false
+            nextRound()
+        }
+
+        // Clicks del jugador
+        for ((i, button) in colorButtons.withIndex()) {
+            button.setOnClickListener {
+                if (!playing) return@setOnClickListener
+                flashButton(button)
+                checkUserInput(i)
             }
         }
-
-        btnRestart.setOnClickListener {
-            startGame()
-        }
-
-        startGame()
     }
 
-    private fun startGame() {
-        score = 0
-        tvScore.text = "Puntos: 0"
-        tvTimer.text = "Tiempo: 30"
-        tvGameOver.visibility = View.GONE
-        btnRestart.visibility = View.GONE
-        monster.visibility = View.VISIBLE
-        playing = true
-
-        // Movimiento del monstruo cada 1 segundo
-        moveTimer = object : CountDownTimer(30000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                moveMonster()
-            }
-            override fun onFinish() {}
-        }
-        moveTimer.start()
-
-        // Temporizador principal
-        countDown = object : CountDownTimer(30000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val seconds = millisUntilFinished / 1000
-                tvTimer.text = "Tiempo: $seconds"
-            }
-
-            override fun onFinish() {
-                endGame()
-            }
-        }
-        countDown.start()
+    private fun flashButton(button: Button) {
+        val originalColor = button.backgroundTintList
+        button.setBackgroundColor(Color.WHITE)
+        handler.postDelayed({ button.backgroundTintList = originalColor }, flashDuration)
     }
 
-    private fun endGame() {
+    private fun playSequence() {
         playing = false
-        monster.visibility = View.INVISIBLE
-        tvGameOver.visibility = View.VISIBLE
-        btnRestart.visibility = View.VISIBLE
-        tvTimer.text = "Tiempo: 0"
-        gameOverSound.start()
-        countDown.cancel()
-        moveTimer.cancel()
-    }
+        userIndex = 0
+        var delay = 0L
 
-    private fun moveMonster() {
-        monster.post {
-            val maxX = layout.width - monster.width
-            val maxY = layout.height - monster.height
-            val randomX = Random.nextInt(maxX)
-            val randomY = Random.nextInt(maxY)
-
-            monster.x = randomX.toFloat()
-            monster.y = randomY.toFloat()
+        for (index in sequence) {
+            val button = colorButtons[index]
+            handler.postDelayed({
+                flashButton(button)
+            }, delay)
+            delay += delayBetween
         }
+
+        handler.postDelayed({
+            tvStatus.text = "Tu turno"
+            playing = true
+        }, delay)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (::hitSound.isInitialized) hitSound.release()
-        if (::gameOverSound.isInitialized) gameOverSound.release()
-        if (::countDown.isInitialized) countDown.cancel()
-        if (::moveTimer.isInitialized) moveTimer.cancel()
+    private fun nextRound() {
+        val next = Random.nextInt(0, 4)
+        sequence.add(next)
+        tvStatus.text = "Nivel: ${sequence.size}"
+        playSequence()
+    }
+
+    private fun checkUserInput(choice: Int) {
+        if (choice == sequence[userIndex]) {
+            userIndex++
+            if (userIndex == sequence.size) {
+                tvStatus.text = "¡Correcto! Próximo nivel..."
+                playing = false
+                handler.postDelayed({ nextRound() }, 1000)
+            }
+        } else {
+            playing = false
+            tvStatus.text = "¡Fallaste! Puntaje: ${sequence.size - 1}"
+        }
     }
 }
