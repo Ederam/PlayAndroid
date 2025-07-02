@@ -4,70 +4,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp"
-    android:background="#000000">
+    android:background="#000000"
+    android:padding="16dp">
 
-    <!-- Título -->
+    <!-- Indicador de ronda -->
     <TextView
-        android:id="@+id/tvTitle"
-        android:text="¡Memoria Rápida!"
-        android:textSize="24sp"
+        android:id="@+id/tvRound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ronda 1 de 5"
         android:textColor="#FFFFFF"
-        android:layout_marginBottom="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        android:textSize="20sp"
+        android:layout_marginBottom="12dp" />
 
-    <!-- Botones de colores -->
-    <GridLayout
-        android:id="@+id/colorGrid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:rowCount="2"
-        android:layout_marginBottom="24dp">
-
-        <Button
-            android:id="@+id/btnRed"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:backgroundTint="#FF0000"/>
-
-        <Button
-            android:id="@+id/btnGreen"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:backgroundTint="#00FF00"/>
-
-        <Button
-            android:id="@+id/btnBlue"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:backgroundTint="#0000FF"/>
-
-        <Button
-            android:id="@+id/btnYellow"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:backgroundTint="#FFFF00"/>
-
-    </GridLayout>
-
-    <!-- Texto de estado -->
+    <!-- Texto de instrucción -->
     <TextView
-        android:id="@+id/tvStatus"
-        android:text="¡Presiona para empezar!"
-        android:textSize="18sp"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="16dp"
+        android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:text="Prepárense..."
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:layout_marginBottom="24dp" />
 
-    <!-- Botón de iniciar/reiniciar -->
+    <!-- Botón Jugador A -->
     <Button
-        android:id="@+id/btnStart"
-        android:text="Comenzar"
+        android:id="@+id/btnPlayerA"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:text="Jugador A"
+        android:textSize="24sp"
+        android:background="#FF4444"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Botón Jugador B -->
+    <Button
+        android:id="@+id/btnPlayerB"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:text="Jugador B"
+        android:textSize="24sp"
+        android:background="#448AFF"
+        android:textColor="#FFFFFF" />
+
+    <!-- Resultado final -->
+    <TextView
+        android:id="@+id/tvWinner"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FFFF00"
+        android:textSize="26sp"
+        android:layout_marginTop="24dp"
+        android:visibility="gone" />
+
+    <!-- Botón de reinicio -->
+    <Button
+        android:id="@+id/btnRestart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reiniciar"
+        android:visibility="gone"
+        android:layout_marginTop="12dp"/>
 </LinearLayout>

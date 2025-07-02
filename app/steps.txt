@@ -39,3 +39,26 @@ Marcador del nivel
 Texto de estado y reinicio
 
 Se realiza el juego pero no es entendible su funcionalidad al 100%
+
+---------------------------------
+🎮 JUEGO: “Duelos Toca Rápido”
+⚔️ Descripción:
+Dos jugadores (Jugador A y Jugador B) tienen cada uno un botón.
+Cuando el texto diga “¡YA!”, deben tocar su botón lo más rápido posible.
+El primero en tocar gana el punto.
+El juego va a 5 rondas.
+
+Al final, se muestra el ganador.
+🧠 Qué aprenderás:
+Temporizadores (Handler)
+Lógica de turnos
+Detección de toques simultáneos
+Control de rondas y puntaje
+
+✅ Resultado final:
+Cada jugador tiene un botón grande
+Esperan a que diga “¡YA!”
+El primero en tocar gana la ronda
+Si se adelanta, pierde esa ronda
+A 5 rondas se declara el ganador
+
