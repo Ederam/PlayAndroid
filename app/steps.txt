@@ -1,9 +1,17 @@
 
 Paso 3: Exportar el juego como APK
 Ve a Build > Build Bundle(s) / APK(s) > Build APK(s)
-
 Espera a que termine el proceso
-
 Clic en "locate" para encontrar el archivo .apk
-
 Puedes transferirlo al celular e instalarlo (activando “orígenes desconocidos”)
+
+------------------------
+¡Listo!
+Ya tienes:
+🎮 Un juego funcional
+⏱ Cronómetro
+🛑 Pantalla de “Game Over”
+🏆 Puntaje más alto persistente
+🔊 Sonido de toque
+📦 APK exportado
+

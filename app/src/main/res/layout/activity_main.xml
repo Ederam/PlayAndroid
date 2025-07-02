@@ -36,6 +36,15 @@
         android:background="@android:color/holo_blue_light"
         android:layout_centerInParent="true" />
 
+<!--    <ImageButton-->
+<!--        android:id="@+id/btnTapMe"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:src="@drawable/sonic"-->
+<!--        android:background="@null"-->
+<!--        android:contentDescription="Botón de juego"-->
+<!--        android:layout_centerInParent="true" />-->
+
     <!-- Vista Game Over -->
     <TextView
         android:id="@+id/tvGameOver"

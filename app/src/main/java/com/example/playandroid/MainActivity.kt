@@ -8,6 +8,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.random.Random
 import android.media.MediaPlayer
+import android.view.animation.AnimationUtils
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -57,6 +59,10 @@ class MainActivity : AppCompatActivity() {
 
         tapButton.setOnClickListener {
             tapSound.start()
+            val anim = AnimationUtils.loadAnimation(this, R.anim.button_scale)
+            tapButton.startAnimation(anim)
+            tapSound.start()
+
 
             if (gameRunning) {
                 score++
@@ -131,5 +137,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (::gameTimer.isInitialized) gameTimer.cancel()
+//        if (::gameOverSound.isInitialized) gameOverSound.release()
     }
+
 }
