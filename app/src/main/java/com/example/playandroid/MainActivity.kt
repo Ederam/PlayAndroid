@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.random.Random
+import android.media.MediaPlayer
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,9 +26,17 @@ class MainActivity : AppCompatActivity() {
     private val totalTime = 30_000L // 30 segundos
     private val interval = 1_000L   // Actualiza cada segundo
 
+    private lateinit var highScoreText: TextView
+    private var highScore = 0
+    private val PREFS_NAME = "TapGamePrefs"
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val tapSound = MediaPlayer.create(this, R.raw.tap)
+
+
 
         // Enlazar vistas
         tapButton = findViewById(R.id.btnTapMe)
@@ -35,10 +45,19 @@ class MainActivity : AppCompatActivity() {
         gameOverText = findViewById(R.id.tvGameOver)
         restartButton = findViewById(R.id.btnRestart)
         mainLayout = findViewById(R.id.mainLayout)
+        highScoreText = findViewById(R.id.tvHighScore)
+
+// Cargar mejor puntaje
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        highScore = prefs.getInt("HIGH_SCORE", 0)
+        highScoreText.text = "Mejor: $highScore"
+
 
         startGame()
 
         tapButton.setOnClickListener {
+            tapSound.start()
+
             if (gameRunning) {
                 score++
                 scoreText.text = "Puntos: $score"
@@ -75,11 +94,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun endGame() {
+        val tapEndSound = MediaPlayer.create(this, R.raw.temples)
+        tapEndSound.start()
         gameRunning = false
         tapButton.visibility = View.GONE
         gameOverText.visibility = View.VISIBLE
         restartButton.visibility = View.VISIBLE
+
+        if (score > highScore) {
+            highScore = score
+            highScoreText.text = "Mejor: $highScore"
+
+            val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+            prefs.edit().putInt("HIGH_SCORE", highScore).apply()
+        }
     }
+
 
     private fun resetGame() {
         startGame()
