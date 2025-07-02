@@ -1,143 +1,119 @@
 package com.example.playandroid
 
-
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.random.Random
-import android.media.MediaPlayer
-import android.view.animation.AnimationUtils
-
-
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var tapButton: Button
-    private lateinit var scoreText: TextView
-    private lateinit var timerText: TextView
-    private lateinit var gameOverText: TextView
-    private lateinit var restartButton: Button
-    private lateinit var mainLayout: RelativeLayout
+    private lateinit var monster: ImageView
+    private lateinit var tvScore: TextView
+    private lateinit var tvTimer: TextView
+    private lateinit var tvGameOver: TextView
+    private lateinit var btnRestart: Button
+    private lateinit var layout: RelativeLayout
 
     private var score = 0
-    private var gameRunning = true
-    private lateinit var gameTimer: CountDownTimer
-
-    private val totalTime = 30_000L // 30 segundos
-    private val interval = 1_000L   // Actualiza cada segundo
-
-    private lateinit var highScoreText: TextView
-    private var highScore = 0
-    private val PREFS_NAME = "TapGamePrefs"
-
+    private var playing = false
+    private lateinit var hitSound: MediaPlayer
+    private lateinit var gameOverSound: MediaPlayer
+    private lateinit var countDown: CountDownTimer
+    private lateinit var moveTimer: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val tapSound = MediaPlayer.create(this, R.raw.tap)
 
+        monster = findViewById(R.id.imgMonster)
+        tvScore = findViewById(R.id.tvScore)
+        tvTimer = findViewById(R.id.tvTimer)
+        tvGameOver = findViewById(R.id.tvGameOver)
+        btnRestart = findViewById(R.id.btnRestart)
+        layout = findViewById(R.id.mainLayout)
 
+//        hitSound = MediaPlayer.create(this, R.raw.hit)
+//        gameOverSound = MediaPlayer.create(this, R.raw.game_over)
 
-        // Enlazar vistas
-        tapButton = findViewById(R.id.btnTapMe)
-        scoreText = findViewById(R.id.tvScore)
-        timerText = findViewById(R.id.tvTimer)
-        gameOverText = findViewById(R.id.tvGameOver)
-        restartButton = findViewById(R.id.btnRestart)
-        mainLayout = findViewById(R.id.mainLayout)
-        highScoreText = findViewById(R.id.tvHighScore)
-
-// Cargar mejor puntaje
-        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-        highScore = prefs.getInt("HIGH_SCORE", 0)
-        highScoreText.text = "Mejor: $highScore"
-
-
-        startGame()
-
-        tapButton.setOnClickListener {
-            tapSound.start()
-            val anim = AnimationUtils.loadAnimation(this, R.anim.button_scale)
-            tapButton.startAnimation(anim)
-            tapSound.start()
-
-
-            if (gameRunning) {
+        monster.setOnClickListener {
+            if (playing) {
                 score++
-                scoreText.text = "Puntos: $score"
-                moveButtonRandomly()
+                tvScore.text = "Puntos: $score"
+                hitSound.start()
+                moveMonster()
             }
         }
 
-        restartButton.setOnClickListener {
-            resetGame()
+        btnRestart.setOnClickListener {
+            startGame()
         }
+
+        startGame()
     }
 
     private fun startGame() {
         score = 0
-        gameRunning = true
-        scoreText.text = "Puntos: $score"
-        timerText.text = "Tiempo: 30"
-        tapButton.visibility = View.VISIBLE
-        gameOverText.visibility = View.GONE
-        restartButton.visibility = View.GONE
+        tvScore.text = "Puntos: 0"
+        tvTimer.text = "Tiempo: 30"
+        tvGameOver.visibility = View.GONE
+        btnRestart.visibility = View.GONE
+        monster.visibility = View.VISIBLE
+        playing = true
 
-        gameTimer = object : CountDownTimer(totalTime, interval) {
+        // Movimiento del monstruo cada 1 segundo
+        moveTimer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val secondsLeft = millisUntilFinished / 1000
-                timerText.text = "Tiempo: $secondsLeft"
+                moveMonster()
+            }
+            override fun onFinish() {}
+        }
+        moveTimer.start()
+
+        // Temporizador principal
+        countDown = object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val seconds = millisUntilFinished / 1000
+                tvTimer.text = "Tiempo: $seconds"
             }
 
             override fun onFinish() {
                 endGame()
             }
-        }.start()
-
-        moveButtonRandomly()
+        }
+        countDown.start()
     }
 
     private fun endGame() {
-        val tapEndSound = MediaPlayer.create(this, R.raw.temples)
-        tapEndSound.start()
-        gameRunning = false
-        tapButton.visibility = View.GONE
-        gameOverText.visibility = View.VISIBLE
-        restartButton.visibility = View.VISIBLE
-
-        if (score > highScore) {
-            highScore = score
-            highScoreText.text = "Mejor: $highScore"
-
-            val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-            prefs.edit().putInt("HIGH_SCORE", highScore).apply()
-        }
+        playing = false
+        monster.visibility = View.INVISIBLE
+        tvGameOver.visibility = View.VISIBLE
+        btnRestart.visibility = View.VISIBLE
+        tvTimer.text = "Tiempo: 0"
+        gameOverSound.start()
+        countDown.cancel()
+        moveTimer.cancel()
     }
 
-
-    private fun resetGame() {
-        startGame()
-    }
-
-    private fun moveButtonRandomly() {
-        tapButton.post {
-            val maxX = mainLayout.width - tapButton.width
-            val maxY = mainLayout.height - tapButton.height
-
+    private fun moveMonster() {
+        monster.post {
+            val maxX = layout.width - monster.width
+            val maxY = layout.height - monster.height
             val randomX = Random.nextInt(maxX)
             val randomY = Random.nextInt(maxY)
 
-            tapButton.x = randomX.toFloat()
-            tapButton.y = randomY.toFloat()
+            monster.x = randomX.toFloat()
+            monster.y = randomY.toFloat()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::gameTimer.isInitialized) gameTimer.cancel()
-//        if (::gameOverSound.isInitialized) gameOverSound.release()
+        if (::hitSound.isInitialized) hitSound.release()
+        if (::gameOverSound.isInitialized) gameOverSound.release()
+        if (::countDown.isInitialized) countDown.cancel()
+        if (::moveTimer.isInitialized) moveTimer.cancel()
     }
-
 }

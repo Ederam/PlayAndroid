@@ -2,6 +2,7 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondo"
     android:padding="16dp">
 
     <!-- Cronómetro -->
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Tiempo: 30"
         android:textSize="20sp"
-        android:textColor="#000"
+        android:textColor="#FFFFFF"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
@@ -22,54 +23,31 @@
         android:layout_height="wrap_content"
         android:text="Puntos: 0"
         android:textSize="20sp"
-        android:textColor="#000"
+        android:textColor="#FFFFFF"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <!-- Botón que se toca -->
-    <Button
-        android:id="@+id/btnTapMe"
+    <!-- Monstruo (inicialmente invisible) -->
+    <ImageView
+        android:id="@+id/imgMonster"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:text="¡Tócame!"
-        android:textColor="#FFF"
-        android:background="@android:color/holo_blue_light"
+        android:src="@drawable/sullivan"
+        android:visibility="invisible"
         android:layout_centerInParent="true" />
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/btnTapMe"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        android:src="@drawable/sonic"-->
-<!--        android:background="@null"-->
-<!--        android:contentDescription="Botón de juego"-->
-<!--        android:layout_centerInParent="true" />-->
-
-    <!-- Vista Game Over -->
+    <!-- Pantalla Game Over -->
     <TextView
         android:id="@+id/tvGameOver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="¡Juego Terminado!"
-        android:textSize="30sp"
+        android:textSize="28sp"
         android:textColor="#FF0000"
         android:visibility="gone"
         android:layout_centerInParent="true" />
 
-    <!-- Puntaje máximo -->
-    <TextView
-        android:id="@+id/tvHighScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mejor: 0"
-        android:textSize="20sp"
-        android:textColor="#000"
-        android:layout_below="@id/tvScore"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp"/>
-
-
-    <!-- Botón de reinicio -->
+    <!-- Botón Reiniciar -->
     <Button
         android:id="@+id/btnRestart"
         android:layout_width="wrap_content"
@@ -78,6 +56,5 @@
         android:visibility="gone"
         android:layout_below="@id/tvGameOver"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
-
+        android:layout_marginTop="16dp"/>
 </RelativeLayout>
